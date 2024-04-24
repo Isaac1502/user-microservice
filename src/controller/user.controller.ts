@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../entity/user.entity";
 import { getRepository } from "typeorm";
-import bcryptjs from 'bcryptjs';
-
 
 // export const Ambassadors = async (req, res) => {
 //   res.send(
@@ -37,47 +35,50 @@ import bcryptjs from 'bcryptjs';
 //   );
 // };
 
-export const Create = async (req, res) => {
+export const Create = async (req: Request, res: Response) => {
   const { password, ...body } = req.body;
 
   const user = await getRepository(User).save({
-    ...body,
-    password: await bcryptjs.hash(password, 10),
-    is_ambassador: req.path === "/api/ambassador/register",
-  }); // TODO: google create (body)
-
-  delete user.password;
+    ...req.body,
+    is_admin: req.path === "/api/admin/create",
+  });
 
   res.send(user);
 };
 
-export const Delete = async (req, res) => {
-  const { id } = req.body;
-
+export const Delete = async (req: Request, res: Response) => {
   try {
-    const user = await getRepository(User).delete(id);
+    await getRepository(User).delete(req?.params?.id);
+    res.send({ message: "user deleted." });
   } catch (e) {
     res.send({ message: "user doesn't exist." });
   }
 };
 
-export const Update = async (req, res) => {
-  const { id, ...body } = req.body;
+export const Update = async (req: Request, res: Response) => {
+  const user = await getRepository(User).findOne({
+    id: Number(req?.params?.id),
+  });
+  if (user) {
+    const updated_user = {
+      ...user,
+      ...req.body,
+    };
 
-  const user = await getRepository(User).findOne({ id });
-
-  const updated_user = {
-    ...user,
-    ...body,
-  };
-
-  await getRepository(User).save(updated_user);
+    await getRepository(User).save(updated_user);
+    res.send({ message: "user updated." });
+  } else {
+    res.send({ message: "user doesn't exist." });
+  }
 };
 
-export const GetUser = async (req, res) => {
-  const { id } = req.body;
-
-  const user = await getRepository(User).findOne({ id });
-
-  res.send(user);
+export const GetUser = async (req: Request, res: Response) => {
+  const user = await getRepository(User).findOne({
+    id: Number(req?.params?.id),
+  });
+  if (user) {
+    res.send(user);
+  } else {
+    res.send({ message: "user doesn't exist." });
+  }
 };
