@@ -1,3 +1,5 @@
+import { QueueClient } from "./kafka/queueClient";
+
 const express = require("express");
 const cors = require("cors");
 const { createConnection } = require("typeorm");
@@ -29,3 +31,5 @@ createConnection().then(async () => {
     console.log("listening to port 8000");
   });
 });
+
+QueueClient().then(console.error);
