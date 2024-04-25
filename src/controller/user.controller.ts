@@ -82,3 +82,9 @@ export const GetUser = async (req: Request, res: Response) => {
     res.send({ message: "user doesn't exist." });
   }
 };
+
+export const GetAllUsers = async (req: Request, res: Response) => {
+  const users = await getRepository(User).find();
+
+  res.send(users);
+};

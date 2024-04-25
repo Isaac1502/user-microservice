@@ -6,6 +6,7 @@ const {
   Update,
   Delete,
   GetUser,
+  GetAllUsers,
 } = require("./controller/user.controller");
 
 export const routes = (router) => {
@@ -14,6 +15,7 @@ export const routes = (router) => {
   router.post("/api/admin/delete", Delete);
   router.delete("/api/user/:id", Delete);
   router.get("/api/user/:id", GetUser);
+  router.get("/api/users", GetAllUsers);
   router.post("/api/user", Create);
   router.patch("/api/user/:id", Update);
 };
