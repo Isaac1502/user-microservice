@@ -48,7 +48,7 @@ export const Create = async (req: Request, res: Response) => {
 
 export const Delete = async (req: Request, res: Response) => {
   try {
-    await getRepository(User).delete(req?.params?.id);
+    await getRepository(User).delete({id: Number(req?.params?.id)});
     res.send({ message: "user deleted." });
   } catch (e) {
     res.send({ message: "user doesn't exist." });
