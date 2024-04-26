@@ -1,6 +1,7 @@
 import { EachMessagePayload, Kafka } from "kafkajs";
 import { getRepository } from "typeorm";
 import { User } from "../entity/user.entity";
+
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -24,6 +25,7 @@ export const QueueClient = async () => {
   await consumer.run({
     eachMessage: async (message: EachMessagePayload) => {
       const userFromQueue = JSON.parse(message.message.value.toString());
+      console.log(userFromQueue);
       const user = await getRepository(User).findOne({
         email: userFromQueue.email,
       });
