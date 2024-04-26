@@ -9,7 +9,18 @@ const cookieParser = require("cookie-parser");
 
 dotenv.config();
 
-createConnection().then(async () => {
+createConnection(
+  {
+      "type": "mysql",
+      "host": process.env.DATABASE_HOST,
+      "port": 3306,
+      "username": process.env.DB_USERNAME,
+      "password": process.env.DB_PASSWORD,
+      "database": process.env.DB_DATABASE,
+      "synchronize": true,
+      "logging": false,
+      "entities": ["src/entity/*.ts"]
+  }).then(async () => {
   const app = express();
 
   app.use(cookieParser());
@@ -17,18 +28,14 @@ createConnection().then(async () => {
   app.use(
     cors({
       credentials: true,
-      origin: [
-        "http://localhost:3000",
-        "http://localhost:4000",
-        "http://localhost:5000",
-      ],
+      origin: ["http://localhost:3000","http://localhost:4000","http://localhost:5000"],
     })
   );
 
   routes(app);
 
-  app.listen(8081, () => {
-    console.log("listening to port 8081");
+  app.listen(process.env.PORT, () => {
+    console.log("listening to port ", process.env.PORT);
   });
 });
 

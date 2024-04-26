@@ -63,3 +63,7 @@ export const GetAllUsers = async (req: Request, res: Response) => {
 
   res.send(users);
 };
+
+export const HealthCheck = async(req: Request, res: Response) => {
+  res.send({});
+}
