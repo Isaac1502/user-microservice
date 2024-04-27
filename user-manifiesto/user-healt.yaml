@@ -1,0 +1,15 @@
+apiVersion: networking.gke.io/v1
+kind: HealthCheckPolicy
+metadata:
+  name: user-healt
+spec:
+  default:
+    config:
+      type: HTTP
+      httpHealthCheck:
+        port: 8000
+        requestPath: /api/admin/ms/healthCheck
+  targetRef:
+    group: ""
+    kind: Service
+    name: user

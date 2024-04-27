@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: user
+  name: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: user
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: user
+    spec:
+      containers:
+        - name: user
+          image: miguelzapataj/service-user
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_HOST
+              value: "35.224.165.179"
+            - name: DB_USERNAME
+              value: "root"
+            - name: DB_PASSWORD
+              value: "1234"
+            - name: DB_DATABASE
+              value: "user-db"
+            - name: PORT
+              value: "8000"
+            - name: CORS
+              value: "http://localhost:3000,http://localhost:4000,http://localhost:5000"
+            - name: QUEUE_CLIENT_ID
+              value: "user-consumer"
+            - name: QUEUE_BROKER
+              value: "pkc-12576z.us-west2.gcp.confluent.cloud:9092"
+            - name: QUEUE_USERNAME
+              value: "DBDDXJ3HM36QBPPF"
+            - name: QUEUE_TOPIC
+              value: "user_topic"
+            - name: QUEUE_PASSWORD
+              value: "pPmTzLlSdfG40ZtcuzrC8LmW0g0MpD1aoGe3QzOHml/Rn0VM4GrZl8a7mbsW8WGa"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+      restartPolicy: Always
